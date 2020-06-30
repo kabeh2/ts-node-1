@@ -1,4 +1,4 @@
-import mongoose, { model, Model, Schema } from 'mongoose';
+import { model, Model, Schema } from 'mongoose';
 import validator from 'validator';
 
 import { IUserDocument } from './IUserDocument.interface';
@@ -47,6 +47,12 @@ const userSchema: Schema = new Schema({
     },
   ],
 });
+
+// userSchema.virtual('tasks', {
+//   ref: 'Task',
+//   localField: '_id',
+//   foreignField: 'owner',
+// });
 
 // Hide password and tokens
 // userSchema.methods.toJSON = function():IUser {
