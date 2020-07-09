@@ -48,11 +48,11 @@ const userSchema: Schema = new Schema({
   ],
 });
 
-// userSchema.virtual('tasks', {
-//   ref: 'Task',
-//   localField: '_id',
-//   foreignField: 'owner',
-// });
+userSchema.virtual('tasks', {
+  ref: 'Task',
+  localField: '_id',
+  foreignField: 'owner',
+});
 
 // Hide password and tokens
 // userSchema.methods.toJSON = function():IUser {
