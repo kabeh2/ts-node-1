@@ -55,16 +55,16 @@ userSchema.virtual('tasks', {
 });
 
 // Hide password and tokens
-// userSchema.methods.toJSON = function():IUser {
-//     const user = this;
+userSchema.methods.toJSON = function (): IUser {
+  const user = this;
 
-//     const userObject: IUser = user.toObject();
+  const userObject: IUser = user.toObject();
 
-//     delete userObject.password;
-//     delete userObject.tokens;
+  delete userObject.password;
+  delete userObject.tokens;
 
-//     return userObject;
-// }
+  return userObject;
+};
 
 // Hash password
 
