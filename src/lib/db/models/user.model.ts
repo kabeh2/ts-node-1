@@ -1,5 +1,7 @@
-import { model, Model, Schema } from 'mongoose';
+import { NextFunction } from 'express';
+import { model, Model, Schema, HookNextFunction } from 'mongoose';
 import validator from 'validator';
+import bcrypt from 'bcrypt';
 
 import { IUserDocument } from './IUserDocument.interface';
 
@@ -66,11 +68,23 @@ userSchema.methods.toJSON = function (): IUser {
   return userObject;
 };
 
-// Hash password
-
 // Generate Tokens
 
 // Find Login Credentials
+
+// Hash password
+userSchema.pre<IUser>('save', async function (
+  this: IUser,
+  next: HookNextFunction
+) {
+  const user = this;
+
+  if (user.isModified('password')) {
+    user.password = await bcrypt.hash(user.password, 8);
+  }
+
+  next();
+});
 
 const User: IUserModel = model<IUser, IUserModel>('User', userSchema);
 
