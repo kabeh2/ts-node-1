@@ -1,7 +1,10 @@
-import { RequestHandler } from 'express';
+import { Request, Response } from 'express';
 import User from '../../db/models/user.model';
 
-export const updateUser: RequestHandler = async (req, res) => {
+export const updateUser: (
+  req: Request,
+  res: Response
+) => Promise<void | Response> = async (req, res) => {
   const updates = Object.keys(req.body);
   const allowedUpdates = ['username', 'email', 'password'];
   const isValidUpdate = updates.every((update) =>
@@ -13,16 +16,11 @@ export const updateUser: RequestHandler = async (req, res) => {
   }
 
   try {
-    const user = await User.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-      runValidators: true,
-    });
+    updates.forEach((update) => (req.user[update] = req.body[update]));
 
-    if (!user) {
-      return res.status(404).send();
-    }
+    await req.user.save();
 
-    res.send(user);
+    res.send(req.user);
   } catch (error) {
     console.log(error);
     res.status(400).send(error);

@@ -5,11 +5,10 @@ export const addTask = async (
   req: Request,
   res: Response
 ): Promise<Response | void> => {
+  const task = new Task({ ...req.body, owner: req.user._id });
+
+  if (!task) return res.status(400).send({ error: 'No tasks' });
   try {
-    const task = new Task(req.body);
-
-    if (!task) return res.status(400).send({ error: 'No tasks' });
-
     await task.save();
 
     res.status(201).send(task);

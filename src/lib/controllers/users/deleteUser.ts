@@ -6,7 +6,7 @@ export const deleteUser = async (
   res: Response
 ): Promise<void | Response> => {
   try {
-    const user = await User.findByIdAndDelete(req.params.id);
+    const user = await User.findByIdAndDelete(req.user._id);
 
     if (!user) {
       return res

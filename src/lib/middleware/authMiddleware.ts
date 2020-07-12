@@ -1,5 +1,4 @@
-import { NextFunction, Response } from 'express';
-import { Request } from 'express-serve-static-core';
+import { NextFunction, Response, Request } from 'express';
 import jwt from 'jsonwebtoken';
 import User from '../db/models/user.model';
 
