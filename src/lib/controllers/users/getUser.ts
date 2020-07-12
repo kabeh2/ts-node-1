@@ -6,14 +6,14 @@ export const getUser = async (
   res: Response
 ): Promise<void | Response> => {
   try {
-    const user = await User.find({ _id: req.params.id });
+    // const user = await User.find({ _id: req.params.id });
 
-    if (!user)
-      return res.status(400).send({
-        error: 'This user does not exist.',
-      });
+    // if (!user)
+    //   return res.status(400).send({
+    //     error: 'This user does not exist.',
+    //   });
 
-    // res.status(200).send(req.user);
+    res.status(200).send(req.user);
   } catch (error) {
     console.log(error);
     res.status(500).send(error);
