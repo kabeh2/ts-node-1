@@ -1,13 +1,22 @@
+import jwt from 'jsonwebtoken';
 import { NextFunction } from 'express';
 import { model, Model, Schema, HookNextFunction } from 'mongoose';
 import validator from 'validator';
 import bcrypt from 'bcrypt';
 
-import { IUserDocument } from './IUserDocument.interface';
+import { IUserDocument } from '../../../interfaces/IUserDocument';
 
-export interface IUser extends IUserDocument {}
+export interface IUser extends IUserDocument {
+  generateToken(): Promise<string>;
+}
 
-export interface IUserModel extends Model<IUser> {}
+export interface IUserModel extends Model<IUser> {
+  findByCredentials: (
+    password: string,
+    email?: string,
+    username?: string
+  ) => Promise<IUser>;
+}
 
 const userSchema: Schema = new Schema({
   username: {
@@ -68,9 +77,38 @@ userSchema.methods.toJSON = function (): IUser {
   return userObject;
 };
 
-// Generate Tokens
-
 // Find Login Credentials
+userSchema.statics.findByCredentials = async (
+  password: string,
+  username?: string,
+  email?: string
+): Promise<IUser> => {
+  const user: IUser | null = await User.findOne(
+    email !== undefined ? { email } : { username }
+  );
+
+  if (!user) throw new Error('Unable to login.');
+
+  const isMatch: boolean = await bcrypt.compare(password, user.password);
+
+  if (!isMatch) throw new Error('Unable to login.');
+
+  return user;
+};
+
+// Generate Tokens
+userSchema.methods.generateToken = async function (): Promise<string> {
+  const user = this;
+  const secret = process.env.TOKEN_SECRET;
+
+  const token = jwt.sign({ _id: user._id.toString() }, `${secret}`);
+
+  user.tokens = [...user.tokens, { token }];
+
+  user.save();
+
+  return token;
+};
 
 // Hash password
 userSchema.pre<IUser>('save', async function (
