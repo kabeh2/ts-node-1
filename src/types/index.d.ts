@@ -1,5 +1,5 @@
 declare namespace Express {
-  type NewType = import('../db/models/IUserDocument.interface').IUserDocument;
+  type NewType = import('../interfaces/IUserDocument').IUserDocument;
 
   interface Request {
     token: string;

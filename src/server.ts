@@ -8,7 +8,7 @@ import connect from './lib/db/mongoose';
 const port = process.env.PORT || 3002;
 
 // Express setup
-const server = express();
+const server: Application = express();
 
 // database call
 connect();

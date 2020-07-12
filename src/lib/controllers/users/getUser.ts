@@ -13,7 +13,7 @@ export const getUser = async (
         error: 'This user does not exist.',
       });
 
-    res.send(user);
+    // res.status(200).send(req.user);
   } catch (error) {
     console.log(error);
     res.status(500).send(error);
