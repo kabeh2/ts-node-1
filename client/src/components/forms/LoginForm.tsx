@@ -37,22 +37,31 @@ const LoginForm = () => {
           }, 400);
         }}
       >
-        <Form>
-          <MyTextInput
-            label='Username/Email'
-            name='username'
-            type='text'
-            placeholder='Username or Email...'
-          />
+        <Form className='container w-1/4 bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 mx-auto'>
+          <div className='mb-4'>
+            <MyTextInput
+              label='Username/Email'
+              name='username'
+              type='text'
+              placeholder='Username or Email...'
+            />
+          </div>
 
-          <MyTextInput
-            label='Password'
-            name='password'
-            type='password'
-            placeholder='Password...'
-          />
+          <div className='mb-4'>
+            <MyTextInput
+              label='Password'
+              name='password'
+              type='password'
+              placeholder='Password...'
+            />
+          </div>
 
-          <button type='submit'>Submit</button>
+          <button
+            type='submit'
+            className='bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded'
+          >
+            Submit
+          </button>
         </Form>
       </Formik>
     </>
