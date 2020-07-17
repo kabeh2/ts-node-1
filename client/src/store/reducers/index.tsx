@@ -1,6 +1,7 @@
 import { createStore, combineReducers, compose, applyMiddleware } from 'redux';
 import createSagaMiddleware from 'redux-saga';
 import fetchReducer from './fetchReducer';
+import rootSaga from '../sagas/rootSaga';
 
 declare global {
   interface Window {
@@ -16,11 +17,13 @@ const rootReducer = combineReducers({
   fetchReducer,
 });
 
+export type AppState = ReturnType<typeof rootReducer>;
+
 const store = createStore(
   rootReducer,
   composeEnhancers(applyMiddleware(...middlewares))
 );
 
-// sagaMiddleware.run(...)
+sagaMiddleware.run(rootSaga);
 
 export default store;
