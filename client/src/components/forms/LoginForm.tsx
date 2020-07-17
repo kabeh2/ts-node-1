@@ -1,11 +1,18 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import MyTextInput from './MyTextInput';
+import { User } from '../../store/actions/types/User.interface';
+import { UserCredentials } from '../../store/actions/types/UserCredentials.interface';
+import { AppState } from '../../store/reducers';
+import { login } from '../../store/actions/actionCreators';
 
 // And now we can use these
 
-const LoginForm = () => {
+type Props = LinkDispatchProps & LinkStateProps;
+
+const LoginForm = (props: Props) => {
   return (
     <>
       <h1>Subscribe!</h1>
@@ -29,12 +36,20 @@ const LoginForm = () => {
 
             .required('Required'),
         })}
-        onSubmit={(values, { setSubmitting }) => {
-          setTimeout(() => {
-            alert(JSON.stringify(values, null, 2));
-
+        onSubmit={async (
+          values,
+          { setSubmitting, setErrors, setStatus, resetForm }
+        ) => {
+          try {
+            props.login(values);
+            resetForm({});
+            setStatus({ success: true });
+            console.log('Errors: ', props.errors.length);
+          } catch (error) {
+            setStatus({ success: false });
             setSubmitting(false);
-          }, 400);
+            setErrors({});
+          }
         }}
       >
         <Form className='container w-1/4 bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 mx-auto'>
@@ -68,4 +83,22 @@ const LoginForm = () => {
   );
 };
 
-export default LoginForm;
+interface LinkStateProps {
+  user: User;
+  errors: string;
+}
+
+interface LinkDispatchProps {
+  login: (credentials: UserCredentials) => void;
+}
+
+const mapStateToProps = (state: AppState): LinkStateProps => ({
+  user: state.fetchReducer.user,
+  errors: state.fetchReducer.errors,
+});
+
+const mapDispatchToProps = (dispatch: any): LinkDispatchProps => ({
+  login: (credentials: any) => dispatch(login(credentials)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(LoginForm);

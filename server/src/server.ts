@@ -1,3 +1,4 @@
+import cors from 'cors';
 import express, { Application } from 'express';
 import { Server } from 'http';
 import userRouter from './routers/userRouter';
@@ -16,6 +17,8 @@ connect();
 server.use(express.json());
 server.use(express.urlencoded({ extended: true }));
 server.use(express.static('public'));
+
+server.use(cors());
 
 // Middlewares
 
