@@ -1,11 +1,17 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import MyTextInput from './MyTextInput';
+import { AppState } from '../../store/reducers';
+import fetchReducer from '../../store/reducers/fetchReducer';
+import { User } from '../../store/actions/types/User.interface';
+import { NewUser } from '../../store/actions/types/NewUser.interface';
+import { signup } from '../../store/actions/actionCreators';
 
-// And now we can use these
+type Props = LinkStateProps & LinkDispatchProps;
 
-const SignUpForm = () => {
+const SignUpForm = (props: Props) => {
   return (
     <>
       <h1>Subscribe!</h1>
@@ -36,12 +42,20 @@ const SignUpForm = () => {
 
             .required('Required'),
         })}
-        onSubmit={(values, { setSubmitting }) => {
-          setTimeout(() => {
-            alert(JSON.stringify(values, null, 2));
-
+        onSubmit={async (
+          values,
+          { setSubmitting, setErrors, resetForm, setStatus }
+        ) => {
+          try {
+            props.signup(values);
+            resetForm({});
+            setSubmitting(true);
+            setStatus({ success: true });
+          } catch (error) {
             setSubmitting(false);
-          }, 400);
+            setStatus({ success: false });
+            setErrors({});
+          }
         }}
       >
         <Form className='container w-1/4 bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 mx-auto'>
@@ -83,4 +97,20 @@ const SignUpForm = () => {
   );
 };
 
-export default SignUpForm;
+interface LinkStateProps {
+  user: User;
+  errors: string;
+}
+interface LinkDispatchProps {
+  signup: (credentials: NewUser) => void;
+}
+
+const mapStateToProps = (state: AppState): LinkStateProps => ({
+  user: state.fetchReducer.user,
+  errors: state.fetchReducer.errors,
+});
+const mapDispatchToProps = (dispatch: any): LinkDispatchProps => ({
+  signup: (credentials: NewUser) => dispatch(signup(credentials)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(SignUpForm);
