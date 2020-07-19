@@ -83,8 +83,10 @@ userSchema.statics.findByCredentials = async (
   username?: string,
   email?: string
 ): Promise<IUser> => {
+  const emailRegex = /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/;
+  const emailCheck = username ? emailRegex.test(username) : false;
   const user: IUser | null = await User.findOne(
-    email !== undefined ? { email } : { username }
+    emailCheck ? { email: username } : { username }
   );
 
   if (!user) throw new Error('Unable to login.');
