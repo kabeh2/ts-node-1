@@ -4,7 +4,6 @@ import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import MyTextInput from './MyTextInput';
 import { AppState } from '../../store/reducers';
-import fetchReducer from '../../store/reducers/fetchReducer';
 import { User } from '../../store/actions/types/User.interface';
 import { NewUser } from '../../store/actions/types/NewUser.interface';
 import { signup } from '../../store/actions/actionCreators';
