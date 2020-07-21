@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
@@ -7,12 +7,27 @@ import { User } from '../../store/actions/types/User.interface';
 import { UserCredentials } from '../../store/actions/types/UserCredentials.interface';
 import { AppState } from '../../store/reducers';
 import { login } from '../../store/actions/actionCreators';
+import { useHistory } from 'react-router-dom';
 
 // And now we can use these
 
 type Props = LinkDispatchProps & LinkStateProps;
 
+const initialState: string = '';
+
 const LoginForm = (props: Props) => {
+  const [inputError, setInputError] = useState(initialState);
+  const history = useHistory();
+
+  useEffect(() => {
+    if (props.errors) {
+      setInputError(props.errors);
+    }
+    console.log(inputError);
+  }, [props.errors]);
+
+  console.log('Input Error2: ', inputError);
+
   return (
     <>
       <h1>Subscribe!</h1>
@@ -70,6 +85,8 @@ const LoginForm = (props: Props) => {
               placeholder='Password...'
             />
           </div>
+
+          {inputError && <div className='error'>{inputError}</div>}
 
           <button
             type='submit'
