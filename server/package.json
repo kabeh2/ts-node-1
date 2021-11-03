@@ -23,7 +23,7 @@
     "mongodb": "^3.5.8",
     "mongoose": "^5.9.17",
     "morgan": "^1.10.0",
-    "validator": "^13.0.0"
+    "validator": "^13.7.0"
   },
   "devDependencies": {
     "@types/bcrypt": "^3.0.0",
